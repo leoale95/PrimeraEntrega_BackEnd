@@ -26,13 +26,14 @@ router.get('/api/products', (req, res) => {
 router.get('/api/products/:pid', (req, res) => {
   const { pid } = req.params;
   const products = readDataFromFile();
-  const product = products.find((p) => p.id === pid);
+  const product = products.find((p) => p.id === parseInt(pid)); // Convertir pid a número
   if (!product) {
     res.status(404).json({ error: 'Producto no encontrado' });
   } else {
     res.json(product);
   }
 });
+
 
 router.post('/api/products', (req, res) => {
   // Obtener los datos actuales del archivo

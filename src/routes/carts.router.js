@@ -5,6 +5,12 @@ const router = express.Router();
 
 const dataFilePath = path.join(__dirname, '../data/carrito.json'); // Ruta al archivo carrito.json
 
+// Generar un ID único para el carrito
+const generateUniqueId = () => {
+  return Math.random().toString(36).substr(2, 9); // Generación simple de ID
+};
+
+
 // Leer el contenido del archivo carrito.json
 const readDataFromFile = () => {
   const data = fs.readFileSync(dataFilePath, 'utf8');
@@ -45,13 +51,14 @@ router.post('/api/carts', (req, res) => {
 router.get('/api/carts/:cid', (req, res) => {
   const { cid } = req.params;
   const carts = readDataFromFile();
-  const cart = carts.find((c) => c.id === cid);
+  const cart = carts.find((c) => c.id === cid); // No es necesario convertir cid a número
   if (!cart) {
     res.status(404).json({ error: 'Carrito no encontrado' });
   } else {
     res.json(cart.products);
   }
 });
+
 
 router.post('/api/carts/:cid/product/:pid', (req, res) => {
   // Obtener los datos actuales del archivo
